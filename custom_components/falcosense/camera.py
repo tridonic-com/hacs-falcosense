@@ -1,6 +1,7 @@
 """Camera platform for the Tridonic FalcoSENSE integration."""
 
 import io
+import logging
 from typing import override
 
 from falcosense import ShapeGeometry
@@ -15,6 +16,8 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import CONF_OVERLAY, DOMAIN
 from .coordinator import FalcoSenseConfigEntry, FalcoSenseCoordinator
 from .entity import main_identifier
+
+_LOGGER = logging.getLogger(__name__)
 
 PARALLEL_UPDATES = 0
 
@@ -89,4 +92,12 @@ class FalcoSenseCamera(CoordinatorEntity[FalcoSenseCoordinator], Camera):
             CONF_OVERLAY, True
         ):
             return frame
-        return await self.hass.async_add_executor_job(_draw_overlay, frame, annotations)
+        try:
+            return await self.hass.async_add_executor_job(
+                _draw_overlay, frame, annotations
+            )
+        except OSError as err:
+            # A truncated or corrupt frame must not break the camera; fall back
+            # to the raw frame and try again on the next one.
+            _LOGGER.debug("Could not render camera overlay: %s", err)
+            return frame
