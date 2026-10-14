@@ -1,3 +1,5 @@
+<img src="icon.png" alt="Tridonic FalcoSENSE" width="128" align="right" />
+
 # Tridonic FalcoSENSE — HACS test distribution
 
 Pre-release distribution of the **Tridonic FalcoSENSE** Home Assistant
