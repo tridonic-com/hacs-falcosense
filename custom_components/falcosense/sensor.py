@@ -13,7 +13,7 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.const import EntityCategory, UnitOfTime
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import StateType
 
@@ -167,29 +167,41 @@ async def async_setup_entry(
 ) -> None:
     """Set up FalcoSENSE sensors from a config entry."""
     coordinator = entry.runtime_data
-    state = coordinator.data
 
-    entities: list[SensorEntity] = [
+    async_add_entities(
         FalcoSenseDeviceSensor(coordinator, description)
         for description in DEVICE_SENSORS
-    ]
-    for line in state.lines.values():
-        entities.extend(
-            FalcoSenseLineSensor(coordinator, description, line)
-            for description in LINE_SENSORS
-        )
-    for area in state.areas.values():
-        entities.extend(
-            FalcoSenseAreaSensor(coordinator, description, area)
-            for description in AREA_SENSORS
-        )
-    for queue in state.queues.values():
-        entities.extend(
-            FalcoSenseQueueSensor(coordinator, description, queue)
-            for description in QUEUE_SENSORS
-        )
+    )
 
-    async_add_entities(entities)
+    known: set[str] = set()
+
+    @callback
+    def _add_new_shapes() -> None:
+        state = coordinator.data
+        entities: list[SensorEntity] = []
+        for line in state.lines.values():
+            if line.uid not in known:
+                known.add(line.uid)
+                entities.extend(
+                    FalcoSenseLineSensor(coordinator, d, line) for d in LINE_SENSORS
+                )
+        for area in state.areas.values():
+            if area.uid not in known:
+                known.add(area.uid)
+                entities.extend(
+                    FalcoSenseAreaSensor(coordinator, d, area) for d in AREA_SENSORS
+                )
+        for queue in state.queues.values():
+            if queue.uid not in known:
+                known.add(queue.uid)
+                entities.extend(
+                    FalcoSenseQueueSensor(coordinator, d, queue) for d in QUEUE_SENSORS
+                )
+        if entities:
+            async_add_entities(entities)
+
+    _add_new_shapes()
+    entry.async_on_unload(coordinator.async_add_listener(_add_new_shapes))
 
 
 class FalcoSenseDeviceSensor(FalcoSenseEntity, SensorEntity):

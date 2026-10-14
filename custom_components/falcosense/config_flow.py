@@ -106,6 +106,39 @@ class FalcoSenseConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Handle reconfiguration of the host and token."""
+        errors: dict[str, str] = {}
+        reconfigure_entry = self._get_reconfigure_entry()
+        if user_input is not None:
+            client = FalcoSense(
+                user_input[CONF_HOST],
+                user_input[CONF_TOKEN],
+                async_get_clientsession(self.hass, verify_ssl=False),
+            )
+            try:
+                device_name = await client.async_validate()
+            except FalcoSenseAuthError:
+                errors["base"] = "invalid_auth"
+            except FalcoSenseConnectionError:
+                errors["base"] = "cannot_connect"
+            else:
+                await self.async_set_unique_id(device_name)
+                self._abort_if_unique_id_mismatch(reason="wrong_device")
+                return self.async_update_reload_and_abort(
+                    reconfigure_entry, data_updates=user_input
+                )
+
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=self.add_suggested_values_to_schema(
+                STEP_USER_DATA_SCHEMA, reconfigure_entry.data
+            ),
+            errors=errors,
+        )
+
 
 class FalcoSenseOptionsFlow(OptionsFlow):
     """Handle options for Tridonic FalcoSENSE."""

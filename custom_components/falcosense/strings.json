@@ -17,6 +17,16 @@
           "token": "The new API token generated in the FalcoSENSE dashboard."
         }
       },
+      "reconfigure": {
+        "data": {
+          "host": "[%key:common::config_flow::data::host%]",
+          "token": "[%key:common::config_flow::data::access_token%]"
+        },
+        "data_description": {
+          "host": "The hostname or IP address of the FalcoSENSE device.",
+          "token": "The API token generated in the FalcoSENSE dashboard."
+        }
+      },
       "user": {
         "data": {
           "host": "[%key:common::config_flow::data::host%]",

@@ -48,27 +48,41 @@ rules:
   # Gold
   devices: done
   diagnostics: done
-  discovery-update-info: todo
-  discovery: todo
-  docs-data-update: todo
-  docs-examples: todo
-  docs-known-limitations: todo
-  docs-supported-devices: todo
-  docs-supported-functions: todo
-  docs-troubleshooting: todo
-  docs-use-cases: todo
-  dynamic-devices: todo
+  discovery-update-info:
+    status: exempt
+    comment: The device does not advertise a discovery service.
+  discovery:
+    status: exempt
+    comment: >
+      The device offers no discovery mechanism (no mDNS/SSDP service and no
+      stable DHCP hostname or MAC range), so it is configured manually.
+  docs-data-update: done
+  docs-examples: done
+  docs-known-limitations: done
+  docs-supported-devices: done
+  docs-supported-functions: done
+  docs-troubleshooting: done
+  docs-use-cases: done
+  dynamic-devices: done
   entity-category: done
   entity-device-class: done
   entity-disabled-by-default: done
   entity-translations: done
-  exception-translations: todo
-  icon-translations: todo
-  reconfiguration-flow: todo
-  repair-issues: todo
-  stale-devices: todo
-
+  exception-translations:
+    status: exempt
+    comment: >
+      No runtime exceptions are surfaced to the user; the integration registers
+      no actions and config-flow errors use translated strings.
+  icon-translations: done
+  reconfiguration-flow: done
+  repair-issues:
+    status: exempt
+    comment: >
+      There are no user-repairable conditions; a rejected token is handled by
+      the reauthentication flow and connectivity loss is surfaced as entity
+      unavailability.
+  stale-devices: done
   # Platinum
   async-dependency: done
   inject-websession: done
-  strict-typing: todo
+  strict-typing: done

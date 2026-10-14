@@ -12,7 +12,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntityDescription,
 )
 from homeassistant.const import EntityCategory
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from .coordinator import FalcoSenseConfigEntry, FalcoSenseCoordinator
@@ -100,24 +100,37 @@ async def async_setup_entry(
 ) -> None:
     """Set up FalcoSENSE binary sensors from a config entry."""
     coordinator = entry.runtime_data
-    state = coordinator.data
 
-    entities: list[BinarySensorEntity] = [
+    async_add_entities(
         FalcoSenseDeviceBinarySensor(coordinator, description)
         for description in DEVICE_BINARY_SENSORS
-    ]
-    for line in state.lines.values():
-        entities.extend(
-            FalcoSenseLineBinarySensor(coordinator, description, line)
-            for description in LINE_BINARY_SENSORS
-        )
-    for area in state.areas.values():
-        entities.extend(
-            FalcoSenseAreaBinarySensor(coordinator, description, area)
-            for description in AREA_BINARY_SENSORS
-        )
+    )
 
-    async_add_entities(entities)
+    known: set[str] = set()
+
+    @callback
+    def _add_new_shapes() -> None:
+        state = coordinator.data
+        entities: list[BinarySensorEntity] = []
+        for line in state.lines.values():
+            if line.uid not in known:
+                known.add(line.uid)
+                entities.extend(
+                    FalcoSenseLineBinarySensor(coordinator, d, line)
+                    for d in LINE_BINARY_SENSORS
+                )
+        for area in state.areas.values():
+            if area.uid not in known:
+                known.add(area.uid)
+                entities.extend(
+                    FalcoSenseAreaBinarySensor(coordinator, d, area)
+                    for d in AREA_BINARY_SENSORS
+                )
+        if entities:
+            async_add_entities(entities)
+
+    _add_new_shapes()
+    entry.async_on_unload(coordinator.async_add_listener(_add_new_shapes))
 
 
 class FalcoSenseDeviceBinarySensor(FalcoSenseEntity, BinarySensorEntity):

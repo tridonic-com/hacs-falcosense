@@ -1,0 +1,35 @@
+{
+  "entity": {
+    "camera": {
+      "debug": {
+        "default": "mdi:cctv"
+      }
+    },
+    "sensor": {
+      "occupancy": {
+        "default": "mdi:account-group"
+      },
+      "people_in": {
+        "default": "mdi:account-arrow-right"
+      },
+      "people_out": {
+        "default": "mdi:account-arrow-left"
+      },
+      "people_per_minute": {
+        "default": "mdi:account-clock"
+      },
+      "queue_occupancy": {
+        "default": "mdi:account-group"
+      },
+      "queue_people_per_minute": {
+        "default": "mdi:account-clock"
+      },
+      "reset_time": {
+        "default": "mdi:clock-start"
+      },
+      "timezone": {
+        "default": "mdi:map-clock"
+      }
+    }
+  }
+}

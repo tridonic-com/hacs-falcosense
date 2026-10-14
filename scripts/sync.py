@@ -26,7 +26,7 @@ DST = REPO_ROOT / "custom_components" / "falcosense"
 
 # Immutable ref of github.com/tridonic-com/falcosense (tip dbb47ee).
 DEFAULT_FALCOSENSE_REF = "dbb47ee0e2c26c07adcca800b2102680dd6fa222"
-DEFAULT_VERSION = "0.1.1"
+DEFAULT_VERSION = "0.1.2"
 
 EXCLUDE = shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo")
 
