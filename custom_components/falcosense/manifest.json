@@ -1,0 +1,21 @@
+{
+  "domain": "falcosense",
+  "name": "FalcoSENSE",
+  "version": "0.1.0",
+  "codeowners": [
+    "@tridonic-com"
+  ],
+  "config_flow": true,
+  "documentation": "https://www.home-assistant.io/integrations/falcosense",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "loggers": [
+    "falcosense",
+    "aiomqtt"
+  ],
+  "quality_scale": "bronze",
+  "requirements": [
+    "falcosense @ git+https://github.com/tridonic-com/falcosense@29f64c4e61e0c2f2cd76a1ebdbd1080be16f2c3b",
+    "Pillow==12.3.0"
+  ]
+}

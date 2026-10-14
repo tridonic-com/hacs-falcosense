@@ -1,0 +1,100 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]"
+    },
+    "step": {
+      "user": {
+        "data": {
+          "host": "[%key:common::config_flow::data::host%]",
+          "token": "[%key:common::config_flow::data::access_token%]"
+        },
+        "data_description": {
+          "host": "The hostname or IP address of the FalcoSENSE device.",
+          "token": "The API token generated in the FalcoSENSE dashboard."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "dwell_avg_time_alert": {
+        "name": "Average dwell time alert"
+      },
+      "dwell_time_alert": {
+        "name": "Dwell time alert"
+      },
+      "in_alert": {
+        "name": "Inbound alert"
+      },
+      "occupancy_alert": {
+        "name": "Occupancy alert"
+      },
+      "out_alert": {
+        "name": "Outbound alert"
+      }
+    },
+    "camera": {
+      "debug": {
+        "name": "Debug camera"
+      }
+    },
+    "sensor": {
+      "mean_dwell_time": {
+        "name": "Mean dwell time"
+      },
+      "mean_queue_time": {
+        "name": "Mean queue time"
+      },
+      "minutes_occupied": {
+        "name": "Minutes occupied"
+      },
+      "occupancy": {
+        "name": "Occupancy"
+      },
+      "people_in": {
+        "name": "People in"
+      },
+      "people_out": {
+        "name": "People out"
+      },
+      "people_per_minute": {
+        "name": "People per minute"
+      },
+      "queue_average_waiting_time": {
+        "name": "Average waiting time"
+      },
+      "queue_occupancy": {
+        "name": "Occupancy"
+      },
+      "queue_people_per_minute": {
+        "name": "People per minute"
+      },
+      "reset_time": {
+        "name": "Daily reset time"
+      },
+      "timezone": {
+        "name": "Time zone"
+      },
+      "uptime": {
+        "name": "Uptime"
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "overlay": "Overlay areas and lines on the camera"
+        },
+        "data_description": {
+          "overlay": "Draw the commissioned areas and counting lines on top of the debug camera image."
+        }
+      }
+    }
+  }
+}
