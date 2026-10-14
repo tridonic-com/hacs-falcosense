@@ -53,6 +53,7 @@ class FalcoSenseCoordinator(DataUpdateCoordinator[FalcoSenseState]):
         and queues, so we wait for it before the platforms enumerate shapes.
         """
         self.client.add_listener(self._handle_push)
+        self.client.add_connection_listener(self._handle_connection)
         try:
             await self.client.async_validate()
             await self.client.async_connect()
@@ -77,6 +78,21 @@ class FalcoSenseCoordinator(DataUpdateCoordinator[FalcoSenseState]):
     def _handle_push(self) -> None:
         """Handle a state update pushed over MQTT."""
         self.async_set_updated_data(self.client.state)
+
+    @callback
+    def _handle_connection(self, connected: bool) -> None:
+        """Mark entities unavailable while the MQTT connection is down.
+
+        Recovery is handled by the next pushed update, which restores
+        availability via :meth:`async_set_updated_data`.
+        """
+        if connected:
+            if not self.last_update_success:
+                _LOGGER.info("Reconnected to the FalcoSENSE device")
+        elif self.last_update_success:
+            self.async_set_update_error(
+                UpdateFailed("Disconnected from the FalcoSENSE device")
+            )
 
     @override
     async def async_shutdown(self) -> None:

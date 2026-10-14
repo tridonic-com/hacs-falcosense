@@ -16,6 +16,8 @@ from .const import CONF_OVERLAY, DOMAIN
 from .coordinator import FalcoSenseConfigEntry, FalcoSenseCoordinator
 from .entity import main_identifier
 
+PARALLEL_UPDATES = 0
+
 # The device frame is low resolution. Draw the overlay on an upscaled canvas so
 # the lines and labels stay crisp instead of inheriting the frame's pixelation.
 _UPSCALE = 4

@@ -20,6 +20,8 @@ from homeassistant.helpers.typing import StateType
 from .coordinator import FalcoSenseConfigEntry, FalcoSenseCoordinator
 from .entity import FalcoSenseEntity, FalcoSenseShapeEntity
 
+PARALLEL_UPDATES = 0
+
 UNIT_PEOPLE = "people"
 
 

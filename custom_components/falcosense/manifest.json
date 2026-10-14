@@ -1,7 +1,7 @@
 {
   "domain": "falcosense",
   "name": "FalcoSENSE",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "codeowners": [
     "@tridonic-com"
   ],
@@ -13,9 +13,9 @@
     "falcosense",
     "aiomqtt"
   ],
-  "quality_scale": "bronze",
+  "quality_scale": "silver",
   "requirements": [
-    "falcosense @ git+https://github.com/tridonic-com/falcosense@29f64c4e61e0c2f2cd76a1ebdbd1080be16f2c3b",
+    "falcosense @ git+https://github.com/tridonic-com/falcosense@dbb47ee0e2c26c07adcca800b2102680dd6fa222",
     "Pillow==12.3.0"
   ]
 }

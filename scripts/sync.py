@@ -24,9 +24,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DST = REPO_ROOT / "custom_components" / "falcosense"
 
-# Immutable ref of github.com/tridonic-com/falcosense (tip 29f64c4).
-DEFAULT_FALCOSENSE_REF = "29f64c4e61e0c2f2cd76a1ebdbd1080be16f2c3b"
-DEFAULT_VERSION = "0.1.0"
+# Immutable ref of github.com/tridonic-com/falcosense (tip dbb47ee).
+DEFAULT_FALCOSENSE_REF = "dbb47ee0e2c26c07adcca800b2102680dd6fa222"
+DEFAULT_VERSION = "0.1.1"
 
 EXCLUDE = shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo")
 
