@@ -2,13 +2,11 @@
 """Sync the FalcoSENSE integration from Home Assistant core into this HACS repo.
 
 Copies ``homeassistant/components/falcosense/`` from a local Home Assistant core
-checkout into ``custom_components/falcosense/`` and applies the manifest changes
-a HACS custom integration needs that a core integration must not have:
+checkout into ``custom_components/falcosense/`` and applies the one manifest
+change a HACS custom integration needs that a core integration must not have:
+add a ``version`` field (required for custom integrations).
 
-1. add a ``version`` field (required for custom integrations), and
-2. replace the ``falcosense`` PyPI pin with a git-URL requirement pointing at
-   the Tridonic repo (until the matching release is published to PyPI).
-
+The ``falcosense`` library is pinned from PyPI and copied verbatim.
 Everything else is copied verbatim, including the generated
 ``translations/en.json`` (HACS has no build step to generate it). Re-run after
 any change in core.
@@ -24,15 +22,13 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DST = REPO_ROOT / "custom_components" / "falcosense"
 
-# Immutable ref of github.com/tridonic-com/falcosense (tip dbb47ee).
-DEFAULT_FALCOSENSE_REF = "dbb47ee0e2c26c07adcca800b2102680dd6fa222"
-DEFAULT_VERSION = "0.1.3"
+DEFAULT_VERSION = "0.1.4"
 
 EXCLUDE = shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo")
 
 
-def patch_manifest(path: Path, version: str, falcosense_ref: str) -> None:
-    """Add the version field and swap falcosense for a git-URL requirement."""
+def patch_manifest(path: Path, version: str) -> None:
+    """Add the version field required for a custom integration."""
     manifest = json.loads(path.read_text(encoding="utf-8"))
 
     # Place version right after name for readability.
@@ -43,15 +39,6 @@ def patch_manifest(path: Path, version: str, falcosense_ref: str) -> None:
             ordered["version"] = version
     if "version" not in ordered:
         ordered["version"] = version
-
-    requirements = ordered.get("requirements", [])
-    git_url = (
-        "falcosense @ git+https://github.com/tridonic-com/"
-        f"falcosense@{falcosense_ref}"
-    )
-    ordered["requirements"] = [
-        git_url if req.startswith("falcosense") else req for req in requirements
-    ]
 
     path.write_text(
         json.dumps(ordered, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
@@ -71,11 +58,6 @@ def main() -> None:
         default=None,
         help="Integration version for the manifest (default: keep existing or "
         f"{DEFAULT_VERSION}).",
-    )
-    parser.add_argument(
-        "--falcosense-ref",
-        default=DEFAULT_FALCOSENSE_REF,
-        help="Git ref (commit SHA, tag or branch) of the falcosense library.",
     )
     args = parser.parse_args()
 
@@ -98,11 +80,10 @@ def main() -> None:
         shutil.rmtree(DST)
     shutil.copytree(src, DST, ignore=EXCLUDE)
 
-    patch_manifest(DST / "manifest.json", version, args.falcosense_ref)
+    patch_manifest(DST / "manifest.json", version)
 
     print(f"Synced {src} -> {DST}")
     print(f"  version: {version}")
-    print(f"  falcosense ref: {args.falcosense_ref}")
     print("Remember to bump the version and cut a matching release tag.")
 
 
