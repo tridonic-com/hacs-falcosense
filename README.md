@@ -14,8 +14,7 @@ people-counting / occupancy sensor over its local REST and MQTT APIs.
 
 - A running Home Assistant instance (OS, Container, or Supervised recommended;
   these ship `git`, which is needed to install the `falcosense` dependency).
-- [HACS](https://hacs.xyz) installed and linked to a GitHub account that has been
-  **granted read access to this private repository**.
+- [HACS](https://hacs.xyz) installed.
 - Network access on the Home Assistant host (first setup installs the
   `falcosense` library from GitHub via pip).
 - A commissioned FalcoSENSE sensor on your network with the MQTT endpoint enabled
@@ -23,17 +22,14 @@ people-counting / occupancy sensor over its local REST and MQTT APIs.
 
 ## Install
 
-1. Ask the maintainer to grant your GitHub account read access to this repo, and
-   make sure HACS on your instance is logged in as that account
-   (HACS → three-dot menu → *Reload* after access is granted).
-2. Add the repository to HACS, either with the button below or manually via
+1. Add the repository to HACS, either with the button below or manually via
    **HACS → Integrations → three-dot menu → Custom repositories** (add this
    repository's URL with category **Integration**):
 
    [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=tridonic-com&repository=hacs-falcosense&category=integration)
-3. Find **Tridonic FalcoSENSE** in HACS, install it, then **restart Home
+2. Find **Tridonic FalcoSENSE** in HACS, install it, then **restart Home
    Assistant**.
-4. Go to **Settings → Devices & Services → Add integration**, search for
+3. Go to **Settings → Devices & Services → Add integration**, search for
    **FalcoSENSE** (under the Tridonic brand), and enter the sensor's host and
    API token.
 
